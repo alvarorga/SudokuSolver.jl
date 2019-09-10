@@ -1,4 +1,5 @@
-export Sudoku
+export Sudoku,
+       sampleSudoku
 
 """
     struct Sudoku
@@ -17,8 +18,98 @@ struct Sudoku
     candidates::Vector{Vector{Int}}
 end
 
-function Sudoku(grid::Matrix{Int})
+"""
+    Sudoku(grid::Matrix{Int})::Sudoku
+
+Make a Sudoku structure based on an initil grid.
+"""
+function Sudoku(grid::Matrix{Int})::Sudoku
     return Sudoku(grid, write_candidates(grid))
+end
+
+"""
+    sampleSudoku(i::Int)::Sudoku
+
+Create a Sudoku taken from a sample of 6 possible ones.
+"""
+function sampleSudoku(i::Int)::Sudoku
+    i > 6 && throw("Number i: $i not valid.")
+
+    local grid
+    if i == 1
+        grid = [
+            0 0 3 0 2 0 6 0 0;
+            9 0 0 3 0 5 0 0 1;
+            0 0 1 8 0 6 4 0 0;
+            0 0 8 1 0 2 9 0 0;
+            7 0 0 0 0 0 0 0 8;
+            0 0 6 7 0 8 2 0 0;
+            0 0 2 6 0 9 5 0 0;
+            8 0 0 2 0 3 0 0 9;
+            0 0 5 0 1 0 3 0 0;
+        ]
+    elseif i == 2
+        grid = [
+            2 0 0 0 8 0 3 0 0;
+            0 6 0 0 7 0 0 8 4;
+            0 3 0 5 0 0 2 0 9;
+            0 0 0 1 0 5 4 0 8;
+            0 0 0 0 0 0 0 0 0;
+            4 0 2 7 0 6 0 0 0;
+            3 0 1 0 0 7 0 4 0;
+            7 2 0 0 4 0 0 6 0;
+            0 0 4 0 1 0 0 0 3;
+        ]
+    elseif i == 3
+        grid = [
+            0 2 0 0 3 0 0 9 0;
+            0 0 0 9 0 7 0 0 0;
+            9 0 0 2 0 8 0 0 5;
+            0 0 4 8 0 6 5 0 0;
+            6 0 7 0 0 0 2 0 8;
+            0 0 3 1 0 2 9 0 0;
+            8 0 0 6 0 5 0 0 7;
+            0 0 0 3 0 9 0 0 0;
+            0 3 0 0 2 0 0 5 0;
+        ]
+    elseif i == 4
+        grid = [
+            0 0 1 0 0 7 0 9 0;
+            5 9 0 0 8 0 0 0 1;
+            0 3 0 0 0 0 0 8 0;
+            0 0 0 0 0 5 8 0 0;
+            0 5 0 0 6 0 0 2 0;
+            0 0 4 1 0 0 0 0 0;
+            0 8 0 0 0 0 0 3 0;
+            1 0 0 0 2 0 0 7 9;
+            0 2 0 7 0 0 4 0 0;
+        ]
+    elseif i == 5
+        grid = [
+            0 0 0 0 0 3 0 1 7;
+            0 1 5 0 0 9 0 0 8;
+            0 6 0 0 0 0 0 0 0;
+            1 0 0 0 0 7 0 0 0;
+            0 0 9 0 0 0 2 0 0;
+            0 0 0 5 0 0 0 0 4;
+            0 0 0 0 0 0 0 2 0;
+            5 0 0 6 0 0 3 4 0;
+            3 4 0 2 0 0 0 0 0;
+        ]
+    elseif i == 6
+        grid = [
+            3 0 0 2 0 0 0 0 0;
+            0 0 0 1 0 7 0 0 0;
+            7 0 6 0 3 0 5 0 0;
+            0 7 0 0 0 9 0 8 0;
+            9 0 0 0 2 0 0 0 4;
+            0 1 0 8 0 0 0 5 0;
+            0 0 9 0 4 0 3 0 1;
+            0 0 0 7 0 2 0 0 0;
+            0 0 0 0 0 8 0 0 6;
+        ]
+    end
+    return Sudoku(grid)
 end
 
 """
