@@ -9,13 +9,14 @@ Sudoku structure, contains all info about fixed numbers and candidates.
 Fields:
     grid::Matrix{Int}: 9x9 matrix with numbers that are already known to be in
         the solution. An unknow value is represented by 0.
-    candidates::Vector{Vector{Int}}: a 81 length vector with all candidate
-        numbers that can be in each slot of the grid. Grid index (i, j)
-        corresponds to position 9*(i-1) + j in candidates.
+    candidates::Vector{Int}: every entry of this length-81 vector is an
+        integer value where the binary bits set to 1 represent the possible
+        numbers that can go in that position. Example: 001101001 means that
+        numbers {1, 4, 6, 7} are all candidates to be in that cell.
 """
 struct Sudoku
     grid::Matrix{Int}
-    candidates::Vector{Vector{Int}}
+    candidates::Vector{Int}
 end
 
 """
@@ -131,12 +132,14 @@ Index to grid. Take an index and return its corresponding grid position (i, j).
 
 Write the candidate numbers at each position in the grid for a given grid.
 """
-function write_candidates(grid::Matrix{Int})::Vector{Vector{Int}}
-    candidates = fill(Vector{Int}(), 81)
+function write_candidates(grid::Matrix{Int})::Vector{Int}
+    candidates = zeros(Int, 81)
     for i=1:9
         for j=1:9
-            ix = 9*(i-1) + j
-            cands = Vector{Int}()
+            # Skip if number is already fixed.
+            grid[i, j] != 0 && continue
+
+            ix = g2ix(i, j)
             for c=1:9
                 # Discard numbers in the same row or column.
                 any(grid[i, :] .== c) && continue
@@ -146,9 +149,8 @@ function write_candidates(grid::Matrix{Int})::Vector{Vector{Int}}
                 bj = div(j-1, 3)*3
                 any(grid[bi+1:bi+3, bj+1:bj+3] .== c) && continue
 
-                push!(cands, c)
+                candidates[ix] += 1<<(c-1)
             end
-            candidates[ix] = cands
         end
     end
     return candidates
